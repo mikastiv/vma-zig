@@ -1,6 +1,7 @@
 .{
     .name = "example",
     .version = "0.0.0",
+    .minimum_zig_version = "0.15.1",
     .dependencies = .{
         .vma_zig = .{
             .path = "../",
@@ -12,10 +13,6 @@
         .vk_kickstart = .{
             .url = "git+https://github.com/Mikastiv/vk-kickstart#e1eeab13be11ff5d1623ecf138917460380af5b8",
             .hash = "1220845f656d9595d2549692f87cc3d923f12e629abef5f0accf52857b01e9a3d12b",
-        },
-        .vulkan = .{
-            .url = "git+https://github.com/Snektron/vulkan-zig#e43d635893de4c8b89d5ca8aa142984872b7e68f",
-            .hash = "122064f889ea10097a67fc28744fe95d0bfde9af252de147a9b90aa55cecfc30c01c",
         },
     },
     .paths = .{
