@@ -586,14 +586,6 @@ pub const VirtualAllocationInfo = extern struct {
     size: vk.DeviceSize,
     p_user_data: ?*anyopaque = null,
 };
-pub const AllocatedBuffer = struct {
-    handle: vk.Buffer,
-    allocation: Allocation,
-};
-pub const AllocatedImage = struct {
-    handle: vk.Image,
-    allocation: Allocation,
-};
 pub const Allocator = struct {
     pub const Handle = ?*c.struct_VmaAllocator_T;
 
@@ -1115,18 +1107,19 @@ pub const Allocator = struct {
         p_buffer_create_info: *const vk.BufferCreateInfo,
         p_allocation_create_info: *const AllocationCreateInfo,
         p_allocation_info: ?*AllocationInfo,
-    ) Error!AllocatedBuffer {
-        var buffer: AllocatedBuffer = undefined;
+    ) Error!struct { vk.Buffer, Allocation } {
+        var buffer: vk.Buffer = undefined;
+        var allocation: Allocation = undefined;
         const result = c.vmaCreateBuffer(
             self.handle,
             @ptrCast(p_buffer_create_info),
             @ptrCast(p_allocation_create_info),
-            @ptrCast(&buffer.handle),
-            @ptrCast(&buffer.allocation),
+            @ptrCast(&buffer),
+            @ptrCast(&allocation),
             @ptrCast(p_allocation_info),
         );
         try vkCheck(result);
-        return buffer;
+        return .{ buffer, allocation };
     }
 
     pub fn createBufferWithAlignment(
@@ -1135,19 +1128,20 @@ pub const Allocator = struct {
         p_allocation_create_info: *const AllocationCreateInfo,
         min_alignment: vk.DeviceSize,
         p_allocation_info: ?*AllocationInfo,
-    ) Error!AllocatedBuffer {
-        var buffer: AllocatedBuffer = undefined;
+    ) Error!struct { vk.Buffer, Allocation } {
+        var buffer: vk.Buffer = undefined;
+        var allocation: Allocation = undefined;
         const result = c.vmaCreateBufferWithAlignment(
             self.handle,
             @ptrCast(p_buffer_create_info),
             @ptrCast(p_allocation_create_info),
             @ptrFromInt(@intFromEnum(min_alignment)),
-            @ptrCast(&buffer.handle),
-            @ptrCast(&buffer.allocation),
+            @ptrCast(&buffer),
+            @ptrCast(&allocation),
             @ptrCast(p_allocation_info),
         );
         try vkCheck(result);
-        return buffer;
+        return .{ buffer, allocation };
     }
 
     pub fn createDedicatedBuffer(
@@ -1156,19 +1150,20 @@ pub const Allocator = struct {
         p_allocation_create_info: *const AllocationCreateInfo,
         p_memory_allocate_next: ?*anyopaque,
         p_allocation_info: ?*AllocationInfo,
-    ) Error!AllocatedBuffer {
-        var buffer: AllocatedBuffer = undefined;
+    ) Error!struct { vk.Buffer, Allocation } {
+        var buffer: vk.Buffer = undefined;
+        var allocation: Allocation = undefined;
         const result = c.vmaCreateDedicatedBuffer(
             self.handle,
             @ptrCast(p_buffer_create_info),
             @ptrCast(p_allocation_create_info),
             p_memory_allocate_next,
-            @ptrCast(&buffer.handle),
-            @ptrCast(&buffer.allocation),
+            @ptrCast(&buffer),
+            @ptrCast(&allocation),
             @ptrCast(p_allocation_info),
         );
         try vkCheck(result);
-        return buffer;
+        return .{ buffer, allocation };
     }
 
     pub fn createAliasingBuffer(
@@ -1214,18 +1209,19 @@ pub const Allocator = struct {
         p_image_create_info: *const vk.ImageCreateInfo,
         p_allocation_create_info: *const AllocationCreateInfo,
         p_allocation_info: ?*AllocationInfo,
-    ) Error!AllocatedImage {
-        var image: AllocatedImage = undefined;
+    ) Error!struct { vk.Image, Allocation } {
+        var image: vk.Image = undefined;
+        var allocation: Allocation = undefined;
         const result = c.vmaCreateImage(
             self.handle,
             @ptrCast(p_image_create_info),
             @ptrCast(p_allocation_create_info),
-            @ptrCast(&image.handle),
-            @ptrCast(&image.allocation),
+            @ptrCast(&image),
+            @ptrCast(&allocation),
             @ptrCast(p_allocation_info),
         );
         try vkCheck(result);
-        return image;
+        return .{ image, allocation };
     }
 
     pub fn createDedicatedImage(
@@ -1234,19 +1230,20 @@ pub const Allocator = struct {
         p_allocation_create_info: *const AllocationCreateInfo,
         p_memory_allocate_next: ?*anyopaque,
         p_allocation_info: ?*AllocationInfo,
-    ) Error!AllocatedImage {
-        var image: AllocatedImage = undefined;
+    ) Error!struct { vk.Image, Allocation } {
+        var image: vk.Image = undefined;
+        var allocation: Allocation = undefined;
         const result = c.vmaCreateDedicatedImage(
             allocator,
             @ptrCast(p_image_create_info),
             @ptrCast(p_allocation_create_info),
             p_memory_allocate_next,
-            @ptrCast(&image.handle),
-            @ptrCast(&image.allocation),
+            @ptrCast(&image),
+            @ptrCast(&allocation),
             @ptrCast(p_allocation_info),
         );
         try vkCheck(result);
-        return image;
+        return .{ image, allocation };
     }
 
     pub fn createAliasingImage(
