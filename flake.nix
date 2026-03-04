@@ -1,38 +1,54 @@
 {
-  description = "LLVM build flake";
+  description = "zig flake";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    zls.url = "github:zigtools/zls";
     flake-utils.url = "github:numtide/flake-utils";
+
+    zig = {
+      url = "github:mitchellh/zig-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    zls = {
+      url = "github:zigtools/zls/ce6c8f02c78e622421cfc2405c67c5222819ec03";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, zls, flake-utils }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      nixpkgs,
+      zig,
+      zls,
+      flake-utils,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = import nixpkgs { inherit system; };
-      in {
+      in
+      {
         devShells.default = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
+            zig.packages.${system}."0.15.2"
             zls.packages.${system}.zls
-            xorg.libX11
-            xorg.libXext
-            vulkan-loader
-            vulkan-headers
-            vulkan-tools
             vulkan-validation-layers
-            vulkan-tools-lunarg
-            libGL
-            libGLU
-            shaderc
-            lldb
+            vulkan-loader
+            glfw3
           ];
 
-          LD_LIBRARY_PATH="${pkgs.vulkan-loader}/lib:${pkgs.vulkan-validation-layers}/lib";
-          VULKAN_SDK = "${pkgs.vulkan-headers}";
-          VK_SDK_PATH = "${pkgs.vulkan-headers}";
-          VK_LAYER_PATH = "${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d";
+          LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (
+            with pkgs;
+            [
+              vulkan-loader
+              libxkbcommon
+              libdecor
+              wayland
+            ]
+          );
         };
-      });
+      }
+    );
 }
-
