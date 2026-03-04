@@ -426,16 +426,10 @@ pub const VirtualAllocationCreateFlags = packed struct(Flags) {
     pub const format = FlagFormatMixin(@This()).format;
 };
 
-pub const struct_VmaAllocator_T = opaque {};
-pub const struct_VmaPool_T = opaque {};
-pub const Pool = ?*struct_VmaPool_T;
-pub const struct_VmaAllocation_T = opaque {};
-pub const Allocation = ?*struct_VmaAllocation_T;
-pub const struct_VmaDefragmentationContext_T = opaque {};
-pub const DefragmentationContext = ?*struct_VmaDefragmentationContext_T;
-pub const struct_VmaVirtualAllocation_T = opaque {};
-pub const VirtualAllocation = ?*struct_VmaVirtualAllocation_T;
-pub const struct_VmaVirtualBlock_T = opaque {};
+pub const Pool = ?*c.struct_VmaPool_T;
+pub const Allocation = ?*c.struct_VmaAllocation_T;
+pub const DefragmentationContext = ?*c.struct_VmaDefragmentationContext_T;
+pub const VirtualAllocation = ?*c.struct_VmaVirtualAllocation_T;
 pub const PfnVmaAllocateDeviceMemoryFunction = ?*const fn (Allocator.Handle, u32, vk.DeviceMemory, vk.DeviceSize, ?*anyopaque) callconv(.c) void;
 pub const PfnVmaFreeDeviceMemoryFunction = ?*const fn (Allocator.Handle, u32, vk.DeviceMemory, vk.DeviceSize, ?*anyopaque) callconv(.c) void;
 pub const DeviceMemoryCallbacks = extern struct {
@@ -598,7 +592,7 @@ pub const AllocatedImage = struct {
     allocation: Allocation,
 };
 pub const Allocator = struct {
-    pub const Handle = ?*struct_VmaAllocator_T;
+    pub const Handle = ?*c.struct_VmaAllocator_T;
 
     handle: Handle,
 
@@ -1302,7 +1296,7 @@ pub const Allocator = struct {
 };
 
 pub const VirtualBlock = struct {
-    pub const Handle = ?*struct_VmaVirtualBlock_T;
+    pub const Handle = ?*c.struct_VmaVirtualBlock_T;
 
     handle: Handle,
 
