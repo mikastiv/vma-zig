@@ -23,8 +23,7 @@ pub fn build(b: *std.Build) void {
 
     const wf = b.addWriteFiles();
 
-    const vma_dep = b.dependency("vma", .{});
-    const vma_include = vma_dep.path("include");
+    const vma_include = b.dependency("vma", .{}).path("include");
     const vma_src = wf.add("vk_mem_alloc.cpp",
         \\#define VMA_IMPLEMENTATION
         \\#include "vk_mem_alloc.h"
@@ -37,30 +36,31 @@ pub fn build(b: *std.Build) void {
             .link_libcpp = true,
         }),
     });
-    vma.addCSourceFile(.{ .file = vma_src });
-    vma.addIncludePath(vma_include);
-    vma.addIncludePath(vulkan_headers);
+    vma.root_module.addCSourceFile(.{ .file = vma_src });
+    vma.root_module.addIncludePath(vma_include);
+    vma.root_module.addIncludePath(vulkan_headers);
+
+    const translate_c = b.addTranslateC(.{
+        .root_source_file = vma_include.path(b, "vk_mem_alloc.h"),
+        .target = target,
+        .optimize = optimize,
+    });
+    translate_c.addIncludePath(vulkan_headers);
 
     const vma_zig = b.addModule("vma-zig", .{
         .root_source_file = b.path("src/root.zig"),
         .target = target,
         .optimize = optimize,
+        .link_libc = true,
         .imports = &.{
             .{ .name = "vulkan", .module = vulkan },
+            .{ .name = "c", .module = translate_c.createModule() },
         },
-        .link_libc = true,
     });
     vma_zig.addIncludePath(vma_include);
     vma_zig.addIncludePath(vulkan_headers);
     vma_zig.linkLibrary(vma);
     vma_zig.linkSystemLibrary(vulkan_lib, .{});
-
-    const translate_c = b.addTranslateC(.{
-        .root_source_file = vma_dep.path("include/vk_mem_alloc.h"),
-        .target = target,
-        .optimize = optimize,
-    });
-    translate_c.addIncludePath(vulkan_headers);
 
     const translate_c_output = b.addInstallFile(translate_c.getOutput(), "vk_mem_alloc.zig");
     b.getInstallStep().dependOn(&translate_c_output.step);

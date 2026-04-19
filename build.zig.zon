@@ -1,24 +1,24 @@
 .{
     .name = .vma_zig,
     .version = "0.1.0",
-    .minimum_zig_version = "0.15.2",
+    .minimum_zig_version = "0.16.0",
     .fingerprint = 0xaf0dae71b6418202,
     .dependencies = .{
         .vulkan_headers = .{
-            .url = "git+https://github.com/KhronosGroup/Vulkan-Headers#0777a3ad88bad5f4b11cfd509458bbc0ddadc773",
-            .hash = "N-V-__8AAMZuLQIcPe--JSv0kn_Ga8tsjgbkaojW0OHW2Rfd",
+            .url = "git+https://github.com/KhronosGroup/Vulkan-Headers#f6a6f7ab165cedbfa2a7d0c93fe27a2d01ce09c8",
+            .hash = "N-V-__8AAC1ZbAIG2kVq3iPpAWaOlDTQ3MOyOyQQR0o_-9ez",
         },
         .vk_kickstart = .{
-            .url = "git+https://github.com/mikastiv/vk-kickstart#ddf15b404c7e543a258c7edf9e567ded456a4808",
-            .hash = "vk_kickstart-0.1.0-YDdE9JlIAQC0ZO0mjdV8NLeXoEoNxXWjAAynT13_lFl3",
+            .url = "git+https://github.com/mikastiv/vk-kickstart#e6b84eef8ca45886849f2761838b82198f294a4d",
+            .hash = "vk_kickstart-0.1.0-YDdE9H5IAQC-4XO4nmcuyycnd6z2KvoZ2CIRK1Ic9usD",
         },
         .vma = .{
             .url = "git+https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator#b3cbbb43ea3a506dffe10759e205a41c27c35ae2",
             .hash = "N-V-__8AAEQTPwCBpcfOoQPJ-G1anGhST2Wk5Okcs5xHa25w",
         },
         .vulkan = .{
-            .url = "git+https://github.com/Snektron/vulkan-zig#c9c4dae70356766f0954ae7d2b8aba4d1dd53a2a",
-            .hash = "vulkan-0.0.0-r7Ytx6hBAwBUnt0XA-uOkR2hda4fAHFhQITNTgJpnFkY",
+            .url = "git+https://github.com/Snektron/vulkan-zig#be16fc99f7f794cba90334978c6c5aadeda8094f",
+            .hash = "vulkan-0.0.0-r7Ytx-V9AwCwHxS2TaZ-KJCp_3axidu3ASZUg3B512-k",
         },
     },
     .paths = .{

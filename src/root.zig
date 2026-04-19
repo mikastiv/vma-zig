@@ -1,8 +1,6 @@
 const std = @import("std");
 const vk = @import("vulkan");
-const c = @cImport({
-    @cInclude("vk_mem_alloc.h");
-});
+const c = @import("c");
 
 const HANDLE = std.os.windows.HANDLE;
 
