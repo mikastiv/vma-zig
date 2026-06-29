@@ -13,8 +13,8 @@
             .hash = "vk_kickstart-0.1.0-YDdE9H5IAQC-4XO4nmcuyycnd6z2KvoZ2CIRK1Ic9usD",
         },
         .vma = .{
-            .url = "git+https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator#b3cbbb43ea3a506dffe10759e205a41c27c35ae2",
-            .hash = "N-V-__8AAEQTPwCBpcfOoQPJ-G1anGhST2Wk5Okcs5xHa25w",
+            .url = "git+https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator#3aa921224c154a0d2c43912bc88e1c42ce1f7607",
+            .hash = "N-V-__8AAG7MQQCXcvOh0VkmSXF9qW5CTbgporOoN7XDgeov",
         },
         .vulkan = .{
             .url = "git+https://github.com/Snektron/vulkan-zig#be16fc99f7f794cba90334978c6c5aadeda8094f",

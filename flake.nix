@@ -3,52 +3,44 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
 
-    zig = {
-      url = "github:mitchellh/zig-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    zls = {
-      url = "github:zigtools/zls/494486203c3a48927f2383aa3d5ce5fca112186d";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    zig-flake.url = "github:silversquirl/zig-flake";
+    zig-flake.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
     {
       self,
       nixpkgs,
-      zig,
-      zls,
-      flake-utils,
+      zig-flake,
     }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
-      let
-        pkgs = import nixpkgs { inherit system; };
-      in
-      {
-        devShells.default = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [
-            zig.packages.${system}."0.16.0"
-            zls.packages.${system}.zls
-            vulkan-validation-layers
-            vulkan-loader
-            glfw3
-          ];
-
-          LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (
-            with pkgs;
-            [
+    let
+      forAllSystems =
+        f:
+        builtins.mapAttrs (
+          system: pkgs: f system pkgs zig-flake.packages.${system}.zig_0_16_0
+        ) nixpkgs.legacyPackages;
+    in
+    {
+      devShells = forAllSystems (
+        system: pkgs: zig: {
+          default = pkgs.mkShell {
+            buildInputs = with pkgs; [
               vulkan-loader
-              libxkbcommon
-              libdecor
-              wayland
-            ]
-          );
-        };
-      }
-    );
+            ];
+            nativeBuildInputs = [
+              zig
+              zig.zls
+            ];
+
+            LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (
+              with pkgs;
+              [
+                vulkan-loader
+              ]
+            );
+          };
+        }
+      );
+    };
 }

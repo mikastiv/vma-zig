@@ -64,4 +64,13 @@ pub fn build(b: *std.Build) void {
 
     const translate_c_output = b.addInstallFile(translate_c.getOutput(), "vk_mem_alloc.zig");
     b.getInstallStep().dependOn(&translate_c_output.step);
+
+    const tests = b.addTest(.{
+        .root_module = vma_zig,
+    });
+
+    const run_tests = b.addRunArtifact(tests);
+
+    const test_step = b.step("test", "Run tests");
+    test_step.dependOn(&run_tests.step);
 }

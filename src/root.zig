@@ -8,6 +8,7 @@ pub const VMA_VERSION = vk.makeApiVersion(0, 3, 4, 0);
 pub const VMA_VULKAN_VERSION = @import("std").zig.c_translation.promoteIntLiteral(c_int, 1004000, .decimal);
 pub const VMA_DEDICATED_ALLOCATION = @as(c_int, 1);
 pub const VMA_BIND_MEMORY2 = @as(c_int, 1);
+pub const VMA_GET_PHYSICAL_DEVICE_PROPERTIES2 = @as(c_int, 1);
 pub const VMA_MEMORY_BUDGET = @as(c_int, 1);
 pub const VMA_BUFFER_DEVICE_ADDRESS = @as(c_int, 1);
 pub const VMA_MEMORY_PRIORITY = @as(c_int, 1);
@@ -466,6 +467,7 @@ pub const VulkanFunctions = extern struct {
     getDeviceBufferMemoryRequirements: ?vk.PfnGetDeviceBufferMemoryRequirementsKHR = null,
     getDeviceImageMemoryRequirements: ?vk.PfnGetDeviceImageMemoryRequirementsKHR = null,
     getMemoryWin32HandleKHR: ?*anyopaque = null,
+    vkGetPhysicalDeviceProperties2KHR: ?vk.PfnGetPhysicalDeviceProperties2KHR = null,
 };
 pub const AllocatorCreateInfo = extern struct {
     flags: AllocatorCreateFlags = .{},
@@ -1433,3 +1435,5 @@ fn vkCheck(result: c.VkResult) Error!void {
         else => error.Unknown,
     };
 }
+
+test {}
