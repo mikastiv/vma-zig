@@ -4,6 +4,9 @@ const c = @import("c");
 
 const HANDLE = std.os.windows.HANDLE;
 
+const Instance = vk.InstanceProxy;
+const Device = vk.DeviceProxy;
+
 pub const VMA_VERSION = vk.makeApiVersion(0, 3, 4, 0);
 pub const VMA_VULKAN_VERSION = @import("std").zig.c_translation.promoteIntLiteral(c_int, 1004000, .decimal);
 pub const VMA_DEDICATED_ALLOCATION = @as(c_int, 1);
@@ -469,6 +472,38 @@ pub const VulkanFunctions = extern struct {
     getMemoryWin32HandleKHR: ?*anyopaque = null,
     vkGetPhysicalDeviceProperties2KHR: ?vk.PfnGetPhysicalDeviceProperties2KHR = null,
 };
+pub fn initVulkanFunctions(loader: vk.PfnGetInstanceProcAddr, instance: Instance, device: Device) VulkanFunctions {
+    return .{
+        .getInstanceProcAddr = @ptrCast(loader),
+        .getDeviceProcAddr = @ptrCast(instance.wrapper.dispatch.vkGetDeviceProcAddr),
+        .getPhysicalDeviceProperties = @ptrCast(instance.wrapper.dispatch.vkGetPhysicalDeviceProperties),
+        .getPhysicalDeviceMemoryProperties = @ptrCast(instance.wrapper.dispatch.vkGetPhysicalDeviceMemoryProperties),
+        .allocateMemory = @ptrCast(device.wrapper.dispatch.vkAllocateMemory),
+        .freeMemory = @ptrCast(device.wrapper.dispatch.vkFreeMemory),
+        .mapMemory = @ptrCast(device.wrapper.dispatch.vkMapMemory),
+        .unmapMemory = @ptrCast(device.wrapper.dispatch.vkUnmapMemory),
+        .flushMappedMemoryRanges = @ptrCast(device.wrapper.dispatch.vkFlushMappedMemoryRanges),
+        .invalidateMappedMemoryRanges = @ptrCast(device.wrapper.dispatch.vkInvalidateMappedMemoryRanges),
+        .bindBufferMemory = @ptrCast(device.wrapper.dispatch.vkBindBufferMemory),
+        .bindImageMemory = @ptrCast(device.wrapper.dispatch.vkBindImageMemory),
+        .getBufferMemoryRequirements = @ptrCast(device.wrapper.dispatch.vkGetBufferMemoryRequirements),
+        .getImageMemoryRequirements = @ptrCast(device.wrapper.dispatch.vkGetImageMemoryRequirements),
+        .createBuffer = @ptrCast(device.wrapper.dispatch.vkCreateBuffer),
+        .destroyBuffer = @ptrCast(device.wrapper.dispatch.vkDestroyBuffer),
+        .createImage = @ptrCast(device.wrapper.dispatch.vkCreateImage),
+        .destroyImage = @ptrCast(device.wrapper.dispatch.vkDestroyImage),
+        .cmdCopyBuffer = @ptrCast(device.wrapper.dispatch.vkCmdCopyBuffer),
+        .getBufferMemoryRequirements2KHR = @ptrCast(device.wrapper.dispatch.vkGetBufferMemoryRequirements2KHR),
+        .getImageMemoryRequirements2KHR = @ptrCast(device.wrapper.dispatch.vkGetImageMemoryRequirements2KHR),
+        .bindBufferMemory2KHR = @ptrCast(device.wrapper.dispatch.vkBindBufferMemory2KHR),
+        .bindImageMemory2KHR = @ptrCast(device.wrapper.dispatch.vkBindImageMemory2KHR),
+        .getPhysicalDeviceMemoryProperties2KHR = @ptrCast(instance.wrapper.dispatch.vkGetPhysicalDeviceMemoryProperties2KHR),
+        .getDeviceBufferMemoryRequirements = @ptrCast(device.wrapper.dispatch.vkGetDeviceBufferMemoryRequirements),
+        .getDeviceImageMemoryRequirements = @ptrCast(device.wrapper.dispatch.vkGetDeviceImageMemoryRequirements),
+        .getMemoryWin32HandleKHR = @ptrCast(@constCast(device.wrapper.dispatch.vkGetMemoryWin32HandleKHR)),
+        .vkGetPhysicalDeviceProperties2KHR = @ptrCast(instance.wrapper.dispatch.vkGetPhysicalDeviceProperties2KHR),
+    };
+}
 pub const AllocatorCreateInfo = extern struct {
     flags: AllocatorCreateFlags = .{},
     physical_device: vk.PhysicalDevice,

@@ -8,10 +8,6 @@
             .url = "git+https://github.com/KhronosGroup/Vulkan-Headers#f6a6f7ab165cedbfa2a7d0c93fe27a2d01ce09c8",
             .hash = "N-V-__8AAC1ZbAIG2kVq3iPpAWaOlDTQ3MOyOyQQR0o_-9ez",
         },
-        .vk_kickstart = .{
-            .url = "git+https://github.com/mikastiv/vk-kickstart#e6b84eef8ca45886849f2761838b82198f294a4d",
-            .hash = "vk_kickstart-0.1.0-YDdE9H5IAQC-4XO4nmcuyycnd6z2KvoZ2CIRK1Ic9usD",
-        },
         .vma = .{
             .url = "git+https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator#3aa921224c154a0d2c43912bc88e1c42ce1f7607",
             .hash = "N-V-__8AAG7MQQCXcvOh0VkmSXF9qW5CTbgporOoN7XDgeov",
